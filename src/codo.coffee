@@ -14,7 +14,7 @@ module.exports = (grunt) ->
       @generate()
       
     generate: ->
-      environment = Codo.parseProject(process.cwd(), @options)
+      environment = Codo.parseProject(@options.basedir, @options)
       sections    = @collectStats(environment)
   
       @theme.compile(environment)
@@ -53,41 +53,19 @@ module.exports = (grunt) ->
   
 
   grunt.registerTask "codo", "Generates Codo documentation", ->
-      options = @options(
-        inputs: ["src"]
-        output: "doc"
-        theme: "default"
-        quiet: false
-        verbose: false
-        undocumented: false
-        closure: false
-        debug: true
-        private: false
-        analytics: false
-        title: "API Documentation"
-      )
-      GruntCommand::options =
-        quiet: options.quiet
-        q: options.quiet
-        verbose: options.verbose
-        v: options.verbose
-        undocumented: options.undocumented
-        u: options.undocumented
-        closure: options.closure
-        debug: options.debug
-        d: options.debug
-        private: options.private
-        p: options.private
-        platform: "core"
-        stack: true
-        output: options.output
-        o: options.output
-        theme: options.theme
-        analytics: options.analytics
-        a: options.analytics
-        title: options.title
-        t: options.title
-        inputs: options.inputs
-
+      GruntCommand::options = @options({
+        inputs: ["./src"],
+        output: "./doc",
+        theme: "default",
+        basedir: process.cwd(),
+        quiet: false,
+        verbose: false,
+        undocumented: false,
+        closure: false,
+        debug: true,
+        "private": false,
+        analytics: false,
+        title: "Codo Documentation"
+      })
       GruntCommand.run()
     
